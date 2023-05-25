@@ -14,7 +14,7 @@ public:
 	bool CollapseTile(int value);
 	void Reset();
 
-	int GetEntropy() const { return mAvailableValues.size(); }
+	size_t GetEntropy() const { return mAvailableValues.size(); }
 
 	bool operator<(const Tile& a);
 

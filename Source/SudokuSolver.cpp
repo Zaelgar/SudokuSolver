@@ -1,34 +1,36 @@
+// Jaidon van Herwaarden May 2023
+
 #include "SudokuSolver.hpp"
 
 #include <imgui.h>
 namespace SudokuSolver
 {
-Application::Application(ImGuiIO& io)
-    :mIO(io)
-{}
+	// The main application loop. Returns true when the application wants to close.
+	bool Application::Update()
+	{
+		Render();
 
-// The main application loop. Returns true when the application wants to close.
-bool Application::Update()
-{
-    static bool show = true;
-    static float f = 0.0f;
-    static int counter = 0;
+		return false;
+	}
 
-    ImGui::Begin("Sudoku Solver");                          // Create a window called "Hello, world!" and append into it.
+	void Application::Render()
+	{
+		ImGuiIO imguiIO = ImGui::GetIO();
+		imguiIO.DisplaySize.x = 1280;
+		imguiIO.DisplaySize.y = 800;
 
-    ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too    
+		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize;
+		ImVec2 position{ 150, 150 };
+		ImVec2 windowSize{ 1000, 600 };
+		ImGui::SetNextWindowPos(position);
+		ImGui::SetNextWindowSize(windowSize);
 
-    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+		bool mIsBoardOpen = true;
+		ImGui::Begin("Sudoku Board", &mIsBoardOpen, windowFlags);
 
-    if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-        counter++;
-    ImGui::SameLine();
-    ImGui::Text("counter = %d", counter);
+		mSudokuBoard.RenderBoard();
 
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / mIO.Framerate, mIO.Framerate);
-    ImGui::End();
-
-    return false;
-}
+		ImGui::End();
+	}
 
 };

@@ -2,6 +2,7 @@
 #pragma once
 
 #include <imgui.h>
+#include "SudokuBoard.hpp"
 
 namespace SudokuSolver
 {
@@ -9,16 +10,14 @@ namespace SudokuSolver
 class Application
 {
 public:
-	Application() = delete;
-	Application(ImGuiIO& io);
-
 	bool Update();
 
 	void Terminate();
 	void Render();
 
 private:
-	ImGuiIO& mIO;
+	SudokuBoard mSudokuBoard;
+
 };
 
 } // namespace SudokuSolver
