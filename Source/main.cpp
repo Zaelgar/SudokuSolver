@@ -60,11 +60,11 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 static int windowXPosition;
 static int windowYPosition;
-static int windowXSize = 1280;
-static int windowYSize = 800;
+static int windowXSize = 800;
+static int windowYSize = 600;
 
 // Main code
-int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCommandLine, int nShowCMD)
+int WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCommandLine, _In_ int nShowCMD)
 {
 	// Create application window
 	//ImGui_ImplWin32_EnableDpiAwareness();
@@ -142,19 +142,13 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCommandLine, i
 	// Main loop
 	bool done = false;
 
+	RECT myRect;
+	GetWindowRect(hwnd, &myRect);
 	SudokuSolver::Application myApp;
+	myApp.Initialize(myRect);
 
 	while (!done)
 	{
-		RECT myRect;
-		GetWindowRect(hwnd, &myRect);
-		
-		windowXPosition = myRect.left;
-		windowYPosition = myRect.top;
-		windowXSize = 1280;
-		windowYSize = 800;
-
-
 		// Poll and handle messages (inputs, window resize, etc.)
 		// See the WndProc() function below for our to dispatch events to the Win32 backend.
 		MSG msg;
@@ -176,6 +170,7 @@ int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCommandLine, i
 		if (true)
 		{
 			done = myApp.Update();
+			myApp.Render();
 		}
 		else
 		{
