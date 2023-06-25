@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "Tile.hpp"
+#include <Tile.hpp>
 
 TEST(Tile, NewTileMaxEntropyAndAvailableValues)
 {
