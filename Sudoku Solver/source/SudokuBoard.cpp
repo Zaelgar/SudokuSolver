@@ -28,7 +28,7 @@ namespace SudokuSolver
 		// Related column indices
 		// Start with lowest number in the column, work our way up
 		int startIndex = tileIndex % 9;
-		for (int i = startIndex; startIndex < mBoard.size(); i + 9)
+		for (int i = startIndex; startIndex < mBoard.size(); i += 9)
 		{
 			result.insert(i);
 		}
