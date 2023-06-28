@@ -20,7 +20,6 @@ void SudokuSolverState::Initialize(const Application* const application)
 // The main application loop. Returns true when the application wants to close.
 bool SudokuSolverState::Update()
 {
-	//mWindowSize = mApplication->GetWindowSize();
 	return false;
 }
 
