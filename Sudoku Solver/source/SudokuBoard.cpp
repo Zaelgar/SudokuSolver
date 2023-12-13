@@ -69,7 +69,7 @@ namespace SudokuSolver
 
 	void SudokuBoard::RenderBoard()
 	{
-		auto TextFilterCallback = [](ImGuiInputTextCallbackData* data) { return (data->EventChar < 256 && strchr("123456789", (char)data->EventChar)) ? 1 : 0; }; // Numbers 1-9 only
+		auto TextFilterCallback = [](ImGuiInputTextCallbackData* data) { return (data->EventChar < 256 && strchr("123456789", (char)data->EventChar)) ? 0 : 1; }; // Numbers 1-9 only
 
 		static char buf6[64] = "";
 		ImGui::InputText("Numbers 1-9 only!", buf6, 64, ImGuiInputTextFlags_CallbackCharFilter, TextFilterCallback);
