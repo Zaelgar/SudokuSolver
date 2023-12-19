@@ -10,7 +10,8 @@ int WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPS
 	Application SudokuSolver;
 	SudokuSolver.AddState<SudokuSolverState>({"SudokuSolverState"});
 
-	AppConfig SudokuSolverConfig{ L"Sudoku Solver", 800, 600 };
+	//AppConfig SudokuSolverConfig{ L"Sudoku Solver", 1920, 1080 };
+	AppConfig SudokuSolverConfig{ L"Sudoku Solver", 1280, 720 };
 	SudokuSolver.Run(SudokuSolverConfig);
 
 	return 0;

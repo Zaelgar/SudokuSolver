@@ -37,8 +37,8 @@ struct AppConfig
 	bool mImGuiDocking = false;
 
 	std::wstring appName = L"APPLICATION_NAME";
-	uint32_t mWindowWidth = 1280;
-	uint32_t mWindowHeight = 720;
+	uint32_t mWindowWidth = 1920;//1280;
+	uint32_t mWindowHeight = 1080;//720;
 };
 
 class Application

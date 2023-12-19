@@ -14,6 +14,8 @@ void SudokuSolverState::Initialize(const Application* const application)
 	mWindowSize.x -= 16.f;
 	mWindowSize.y -= 39.f;
 
+	mSudokuBoard.Initialize(45.f);
+
 	mIsInitialized = true;
 }
 
@@ -25,14 +27,21 @@ bool SudokuSolverState::Update()
 
 void SudokuSolverState::Render()
 {
-	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
-	ImGui::SetNextWindowSize(mWindowSize);
-	bool mIsBoardOpen = true;
-	ImGui::Begin("Sudoku Board", &mIsBoardOpen, windowFlags);
+	if (false)
+	{
+		ImGui::ShowDemoWindow();
+	}
+	else
+	{
+		ImGuiWindowFlags windowFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
+		ImGui::SetNextWindowSize(mWindowSize);
+		bool mIsBoardOpen = true;
+		ImGui::Begin("Sudoku Board", &mIsBoardOpen, windowFlags);
 
-	mSudokuBoard.RenderBoard();
+		mSudokuBoard.RenderBoard();
 
-	ImGui::End();
+		ImGui::End();
+	}
 }
 
 void SudokuSolverState::Terminate()
