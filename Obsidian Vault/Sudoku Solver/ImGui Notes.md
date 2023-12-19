@@ -41,3 +41,15 @@ Row height:
 Explicitly set the table dimensions
 `ImGui::TableNextRow(ImGuiTableRowFlags_None, min_row_height)`
 `ImGuiTableFlags_SizingFixedSame`
+
+# Application
+### Board Style
+- Font = 50.f
+- maxTableSize = (595.f, 0.f)
+- Cell Padding = (13.f, 0.f)
+- minimumCellSize = 0.f;
+- Table Flags
+	- ImGuiTableFlags_Borders
+- Line thickness (colour instead)
+- Gonna need a text buffer set for each tile (81 chars + '\\0')
+### Text field style/behaviour

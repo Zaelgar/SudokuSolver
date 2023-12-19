@@ -12,6 +12,24 @@ namespace SudokuSolver
 		auto io = ImGui::GetIO();
 		mDefaultFont = io.Fonts->AddFontDefault();
 		mLargeFont = io.Fonts->AddFontDefault(&fontConfig);
+
+		SudokuBoardStyle mInputTextTableStyle{
+			9, 9,
+			{ 595.f, 0.f },
+			{ 13.f, 0.f },
+			ImGuiTableFlags_Borders,
+			{0.2f, 0.2f, 0.2f, 1.f} }; // dark grey
+
+		mTableStyleInputText = mInputTextTableStyle;
+
+		SudokuBoardStyle tileOutlinesTableStyle{
+			3, 3,
+			{ 595.f, 0.f },
+			{ 13.f, 0.f },
+			ImGuiTableFlags_Borders,
+			{0.7f, 0.7f, 0.7f, 1.f} }; // light grey
+
+		mTableStyleTileOutlines = mInputTextTableStyle;
 	}
 
 	void SudokuBoard::CollapseValueFromTile(int value, int tileIndex)
@@ -23,7 +41,6 @@ namespace SudokuSolver
 			mBoard[index].CollapseTile(value);
 		}
 	}
-
 
 	/// <summary>
 	/// Calculates the indices of the row, column, and local square of the related Sudoku board values
@@ -88,52 +105,69 @@ namespace SudokuSolver
 
 	void SudokuBoard::RenderBoard()
 	{
+		_RenderInputTextTable();
+		_RenderTileOutlinesTable();
+	}
+
+	void SudokuBoard::_RenderTileOutlinesTable()
+	{
+		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, mTableStyleTileOutlines.mTableCellPadding);
+		ImGui::PushStyleColor(ImGuiCol_FrameBg, 0); // Make InputTextFields all no-colour (they are not the same size as the cell)
+		ImGui::PushStyleColor(ImGuiCol_TableBorderLight, mTableStyleTileOutlines.mTableBorderColour);
+
+		if (ImGui::BeginTable("Sudoku Board", mTableStyleTileOutlines.mSizeX, mTableStyleTileOutlines.mTableFlags, mTableStyleTileOutlines.mMaxTableSize))
+		{
+			for (int row = 0; row < mTableStyleTileOutlines.mSizeX; row++)
+			{
+				ImGui::TableNextRow();
+				for (int column = 0; column < mTableStyleTileOutlines.mSizeY; column++)
+				{
+					ImGui::TableNextColumn();
+				}
+			}
+			ImGui::EndTable();
+		}
+
+
+		ImGui::PopStyleColor();
+		ImGui::PopStyleColor();
+		ImGui::PopStyleVar();
+	}
+
+	void SudokuBoard::_RenderInputTextTable()
+	{
 		ImGui::PushFont(mLargeFont);
 		auto TextFilterCallback = [](ImGuiInputTextCallbackData* data) { return (data->EventChar < 256 && strchr("123456789", (char)data->EventChar)) ? 0 : 1; }; // Numbers 1-9 only
 
 		static char buf6[2] = ""; // Number + '\0'
 		ImGui::InputText("Numbers 1-9 only!", buf6, 2, ImGuiInputTextFlags_CallbackCharFilter | ImGuiInputTextFlags_AlwaysOverwrite | ImGuiInputTextFlags_AutoSelectAll, TextFilterCallback);
 
-		static float minCellSize = 50.f;
-		ImGui::SliderFloat("minCellSize", &minCellSize, -10.f, 1000.f);
-
-		static ImVec2 maxTableSize{ 450.f, 450.f };
-		ImGui::SliderFloat2("maxTableSize", &maxTableSize.x, 0, 2000.f);
-
-		static ImGuiTableFlags tableFlags = ImGuiTableFlags_Borders;
-
-		ImGui::CheckboxFlags("ImGuiTableFlags_RowBg", &tableFlags, ImGuiTableFlags_RowBg);
-		ImGui::CheckboxFlags("ImGuiTableFlags_Borders", &tableFlags, ImGuiTableFlags_Borders);
-
-		static ImGuiTableColumnFlags columnFlags = ImGuiTableColumnFlags_None;
-		ImGui::CheckboxFlags("ImGuiTableColumnFlags_WidthFixed", &tableFlags, ImGuiTableColumnFlags_WidthFixed);
-
-		//ImGui::ShowStyleEditor();
-
-		static ImVec2 cellPadding = { 8.f,0.f };
-		ImGui::SliderFloat2("cellPadding", &cellPadding.x, 0.f, 100.f);
-
-		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, cellPadding); // Cell padding of {8.f, 0.f} works for 45.f font input text field
+		ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, mTableStyleInputText.mTableCellPadding);
 		ImGui::PushStyleColor(ImGuiCol_FrameBg, 0); // Make InputTextFields all no-colour (they are not the same size as the cell)
 
-		ImU32 colour1 = ImGui::GetColorU32(ImVec4(0.3f, 0.3f, 0.7f, 0.65f));
-		ImU32 colour2 = ImGui::GetColorU32(ImVec4(0.0f, 0.0f, 0.7f, 0.65f));
+		ImU32 colour2 = ImGui::GetColorU32(ImVec4(0.f, 0.f, 0.f, 0.65f));
+		ImU32 colour1 = ImGui::GetColorU32(ImVec4(0.1f, 0.2f, 0.35f, 0.5f));
 
-
-		const int selectedIndex = 4 + (2 * 9);
-		if (ImGui::BeginTable("Sudoku Board", 9, tableFlags, maxTableSize))
+		ImGui::PushStyleColor(ImGuiCol_TableBorderLight, mTableStyleInputText.mTableBorderColour);
+		const int selectedIndex = 6 + (3 * 9);
+		if (ImGui::BeginTable("Sudoku Board", mTableStyleInputText.mSizeX, mTableStyleInputText.mTableFlags, mTableStyleInputText.mMaxTableSize))
 		{
-			for (int row = 0; row < 9; row++)
+			for (int row = 0; row < mTableStyleInputText.mSizeX; row++)
 			{
-				ImGui::TableNextRow(0, minCellSize);
-				for (int column = 0; column < 9; column++)
+				ImGui::TableNextRow();
+				for (int column = 0; column < mTableStyleInputText.mSizeY; column++)
 				{
 					ImGui::TableNextColumn();
 
-					if (AreIndicesRelated(selectedIndex, (row * 9) + column))
+					bool areIndicesRelated = AreIndicesRelated(selectedIndex, (row * mTableStyleInputText.mSizeX) + column);
+					if (areIndicesRelated)
+					{
 						ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, colour1);
+					}
 					else
+					{
 						ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, colour2);
+					}
 
 					ImGui::SetNextItemWidth(-FLT_MIN); // Align to center?
 					ImGui::InputText("", buf6, 2, ImGuiInputTextFlags_AlwaysOverwrite | ImGuiInputTextFlags_AutoSelectAll);
@@ -141,6 +175,7 @@ namespace SudokuSolver
 			}
 			ImGui::EndTable();
 		}
+		ImGui::PopStyleColor();
 		ImGui::PopStyleColor();
 		ImGui::PopStyleVar();
 		ImGui::PopFont();

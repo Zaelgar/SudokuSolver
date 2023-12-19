@@ -14,7 +14,7 @@ void SudokuSolverState::Initialize(const Application* const application)
 	mWindowSize.x -= 16.f;
 	mWindowSize.y -= 39.f;
 
-	mSudokuBoard.Initialize(45.f);
+	mSudokuBoard.Initialize(60.f);
 
 	mIsInitialized = true;
 }
